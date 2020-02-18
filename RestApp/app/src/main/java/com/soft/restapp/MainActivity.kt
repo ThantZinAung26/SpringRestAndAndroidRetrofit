@@ -2,6 +2,7 @@ package com.soft.restapp
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -31,13 +32,15 @@ class MainActivity : AppCompatActivity() {
             dialog.show()
         }
 
-        swiperefresh.apply {
-            isEnabled = true
-        }
+        swiperefresh.isEnabled = true
+
         recyclerView.apply {
             setHasFixedSize(true)
             adapter = productAdapter
         }
+
+        setUpNewProductListItemDialog()
+        loadProductFromServer()
 
     }
 
@@ -97,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 swiperefresh.isRefreshing = false
                 val items = response.body()
+                Log.d("TAG", items?.size.toString())
                 if(items != null) {
                     productAdapter.addAll(items)
                 }
