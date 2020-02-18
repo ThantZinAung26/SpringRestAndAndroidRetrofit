@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DA8BC34A"
     tools:context=".MainActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -30,12 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorAccent"
         android:clickable="true"
         android:elevation="8dp"
         android:focusable="true"
-        android:text="Add"
-        app:icon="@android:drawable/ic_media_play"
+        app:icon="@drawable/ic_add_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

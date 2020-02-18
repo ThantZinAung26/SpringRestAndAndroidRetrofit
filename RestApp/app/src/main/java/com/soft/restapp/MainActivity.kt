@@ -41,7 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         setUpNewProductListItemDialog()
         loadProductFromServer()
-
+        swiperefresh.setOnRefreshListener {
+//            loadProductFromServer()
+            swiperefresh.isRefreshing = true
+       }
     }
 
     private fun setUpNewProductListItemDialog(): AlertDialog {
