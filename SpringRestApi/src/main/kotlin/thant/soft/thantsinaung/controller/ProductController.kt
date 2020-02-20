@@ -55,7 +55,7 @@ class ProductController(private var productRepo: ProductRepo) {
                 product.get().available = availability
                 productRepo.save(product.get())
                 ResponseEntity(ResponseEntityStatus(true, "product ${product.get().name} is now " +
-                        "${if(availability) "available" else "finished"} ", true), HttpStatus.OK)
+                        "${if(availability) "In Stock" else "Sold Out"} ", true), HttpStatus.OK)
             }
             else -> {
                 ResponseEntity(ResponseEntityStatus(false, "could not find product",false), HttpStatus.NOT_FOUND)

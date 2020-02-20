@@ -7,14 +7,14 @@ import javax.persistence.Id
 
 @Entity
 data class Product(
-
         var name: String,
+        var description: String,
         var available: Boolean) {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long = 0L
 
-        constructor() : this("", false)
+        constructor() : this("", "",false)
 
 }

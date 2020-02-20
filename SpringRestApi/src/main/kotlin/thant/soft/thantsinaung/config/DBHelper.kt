@@ -12,11 +12,11 @@ class DBHelper(private var productRepo: ProductRepo) : CommandLineRunner {
     override fun run(vararg args: String?) {
         productRepo.deleteAll()
         val items = listOf(
-                Product("Iphone", true),
-                Product("Samsung A50", true),
-                Product("Redmi K20", true),
-                Product("Mi CC 9 Pro", true),
-                Product("Macbook Pro 13\"", true)
+                Product("Iphone", "New model.", false),
+                Product("Samsung A50","Amoled display", false),
+                Product("Redmi K20","popup back camera", false),
+                Product("Mi CC 9 Pro", "mid range phone", false),
+                Product("Macbook Pro 13\"", "new model 2018 late.", true)
         )
         productRepo.saveAll(items)
     }
