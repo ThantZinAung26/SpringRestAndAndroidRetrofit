@@ -1,9 +1,7 @@
 package thant.soft.thantsinaung.service
 
-import org.springframework.stereotype.Service
+interface FileService {
 
-@Service
-class FileService {
 
 
 
