@@ -40,12 +40,8 @@ class FileStorageServiceImpl @Autowired constructor(fileProperties: FileProperti
     override fun storeFile(file: MultipartFile): String {
         val filename = StringUtils.cleanPath(file.originalFilename.toString())
         try {
-            if (file.isEmpty) {
-                throw StorageException("Failed to store empty file $filename")
-            }
-            if (filename.contains("..")) {
-                throw StorageException("Cannot store file with relative path outside current directory $filename")
-            }
+            if (file.isEmpty) throw StorageException("Failed to store empty file $filename")
+            if (filename.contains("..")) throw StorageException("Cannot store file with relative path outside current directory $filename")
 
             file.inputStream.use { inputStream ->
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
