@@ -1,13 +1,16 @@
 package com.soft.restapp
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +23,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    private val pickImage = 3
 
     val productAdapter = ProductAdapter(ArrayList())
 
@@ -63,10 +68,18 @@ class MainActivity : AppCompatActivity() {
     private fun postNewProductItem(dialog: DialogInterface, view: View) {
 
         val edTitle = view.findViewById<EditText>(R.id.editText)
+        val edDesc = view.findViewById<EditText>(R.id.edDesc)
+
+        val btnUpload = view.findViewById<ImageButton>(R.id.btnUpload)
+
         val edAvailable = view.findViewById<CheckBox>(R.id.checkBox2)
-        val product = Product(edTitle.text.toString(), edAvailable.isChecked)
+        val product = Product(edTitle.text.toString(), edDesc.text.toString(), "", edAvailable.isChecked)
 
         swiperefresh.isRefreshing = true
+
+        btnUpload.setOnClickListener {
+            choosePhotoIntent()
+        }
 
         RetrofitService.factoryService().addProductItem(product)
             .enqueue( object : Callback<StatusResponseEntity<Product>?> {
@@ -88,6 +101,19 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         dialog.dismiss()
+
+    }
+
+    private fun choosePhotoIntent() {
+        val contentIntent = Intent(Intent.ACTION_GET_CONTENT)
+        contentIntent.type = "image/*"
+        val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val chooseIntent = Intent.createChooser(contentIntent, "Choose Photo")
+        chooseIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickPhotoIntent))
+        startActivityForResult(chooseIntent, pickImage)
+    }
+
+    private fun createImage() {
 
     }
 

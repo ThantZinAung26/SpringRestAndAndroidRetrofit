@@ -32,11 +32,12 @@ class ProductAdapter(private val products: ArrayList<Product>) :
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val tvProductTitle = itemView.findViewById<TextView>(R.id.productTitle)
-        //        private val tvProductDesc = itemView.findViewById<TextView>(R.id.desc)
+        private val tvProductDesc = itemView.findViewById<TextView>(R.id.desc)
         private val checkBox = itemView.findViewById<CheckBox>(R.id.checkBox)
 
         fun bind(product: Product) {
             tvProductTitle.text = product.name
+            tvProductDesc.text = product.description
             checkBox.isChecked = product.isAvailable
             checkBox.text = if (product.isAvailable) "Sold Out" else "In Stock"
 
