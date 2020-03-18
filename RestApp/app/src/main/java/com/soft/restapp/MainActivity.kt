@@ -1,7 +1,9 @@
 package com.soft.restapp
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -14,6 +16,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.integration.android.IntentIntegrator
 import com.soft.restapp.model.Product
 import com.soft.restapp.model.StatusResponseEntity
 import com.soft.restapp.service.RetrofitService
@@ -24,8 +27,9 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    private val pickImage = 3
-
+    companion object {
+        private const val PICK_IMAGE = 3
+    }
     val productAdapter = ProductAdapter(ArrayList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +56,21 @@ class MainActivity : AppCompatActivity() {
 //            loadProductFromServer()
             swiperefresh.isRefreshing = true
        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val intent = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = data?.data
+            try {
+                //val bitmap = FileU
+            } catch (e: Exception) {
+
+            }
+        }
+
     }
 
     private fun setUpNewProductListItemDialog(): AlertDialog {
@@ -110,7 +129,7 @@ class MainActivity : AppCompatActivity() {
         val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         val chooseIntent = Intent.createChooser(contentIntent, "Choose Photo")
         chooseIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickPhotoIntent))
-        startActivityForResult(chooseIntent, pickImage)
+        startActivityForResult(chooseIntent, PICK_IMAGE)
     }
 
     private fun createImage() {
