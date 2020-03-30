@@ -20,7 +20,9 @@ import androidx.appcompat.widget.AppCompatImageButton
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.zxing.integration.android.IntentIntegrator
 import com.soft.restapp.model.Product
@@ -50,29 +52,28 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = setUpNewProductListItemDialog()
 
-        MobileAds.initialize(this)
+        MobileAds.initialize(this) {}
         mAdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
-        mRewardedAd = RewardedAd(this, "ca-app-pub-3940256099942544/5224354917")
-
-        /*val adLoadCallback = object : RewardedAdLoadCallback() {
-            override fun onRewardedAdLoaded() {
-                // Ad successfully loaded.
-                Toast.makeText(this@MainActivity, "successfully ad view", Toast.LENGTH_LONG)
-                    .show()
-            }
-
-            override fun onRewardedAdFailedToLoad(errorCode: Int) {
-                // Ad failed to load.
-                Toast.makeText(this@MainActivity, "Failed ad view", Toast.LENGTH_LONG)
-                    .show()
-            }
-        }
-        mRewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)*/
-
         floatingActionButton.setOnClickListener {
+            mRewardedAd = RewardedAd(this, "ca-app-pub-3940256099942544/5224354917")
+
+            val adLoadCallback = object : RewardedAdLoadCallback() {
+                override fun onRewardedAdLoaded() {
+                    // Ad successfully loaded.
+                    Toast.makeText(this@MainActivity, "successfully ad view", Toast.LENGTH_LONG)
+                        .show()
+                }
+
+                override fun onRewardedAdFailedToLoad(errorCode: Int) {
+                    // Ad failed to load.
+                    Toast.makeText(this@MainActivity, "Failed ad view", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+            mRewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
             dialog.show()
         }
 
@@ -119,22 +120,36 @@ class MainActivity : AppCompatActivity() {
         btnDownloaded.setOnClickListener {
             if (mRewardedAd.isLoaded) {
 //                mRewardedAd = RewardedAd(this, "ca-app-pub-3940256099942544/5224354917")
-                val adLoadCallback = object : RewardedAdLoadCallback() {
-                    override fun onRewardedAdFailedToLoad(p0: Int) {
-                        super.onRewardedAdFailedToLoad(p0)
-                        Toast.makeText(this@MainActivity, "Failed ad view", Toast.LENGTH_LONG)
+                val activity = this@MainActivity
+                val adCallback = object : RewardedAdCallback() {
+
+                    override fun onRewardedAdOpened() {
+                        super.onRewardedAdOpened()
+                        Toast.makeText(this@MainActivity, "ad open", Toast.LENGTH_LONG)
                             .show()
                     }
 
-                    override fun onRewardedAdLoaded() {
-                        super.onRewardedAdLoaded()
-                        Toast.makeText(this@MainActivity, "Success ad view", Toast.LENGTH_LONG)
+                    override fun onRewardedAdClosed() {
+                        super.onRewardedAdClosed()
+                        Toast.makeText(this@MainActivity, "ad close", Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                    override fun onUserEarnedReward(p0: RewardItem) {
+                        Toast.makeText(this@MainActivity, "successfully ad view", Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                    override fun onRewardedAdFailedToShow(p0: Int) {
+                        super.onRewardedAdFailedToShow(p0)
+                        Toast.makeText(this@MainActivity, "ad failed", Toast.LENGTH_LONG)
                             .show()
                     }
                 }
-                mRewardedAd.loadAd(AdRequest.Builder().build(), adLoadCallback)
+                mRewardedAd.show(activity, adCallback)
             } else {
-                Log.d("TAG", "The rewarded ad wasn't loaded yet.")
+                Toast.makeText(this@MainActivity, "ad not load", Toast.LENGTH_LONG)
+                    .show()
             }
 
         }
