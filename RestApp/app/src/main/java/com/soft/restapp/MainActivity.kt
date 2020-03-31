@@ -1,10 +1,14 @@
 package com.soft.restapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,18 +33,21 @@ import com.soft.restapp.model.Product
 import com.soft.restapp.model.StatusResponseEntity
 import com.soft.restapp.service.RetrofitService
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_alert_dialog_create_item.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var mAdView: AdView
     lateinit var mRewardedAd: RewardedAd
-
-    companion object {
-        private const val PICK_IMAGE = 3
-    }
+    lateinit var currentPhotoFilePath: String
 
     val productAdapter = ProductAdapter(ArrayList())
 
@@ -98,11 +105,13 @@ class MainActivity : AppCompatActivity() {
         val intent = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            val uri: Uri? = data?.data
+            val uri: Uri = data?.data!!
             try {
-                //val bitmap = FileU
+                val bitmap = writeImage(this, uri, createImage())
+                btnUpload.setImageBitmap(bitmap)
             } catch (e: Exception) {
-
+                e.printStackTrace()
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -216,8 +225,16 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(chooseIntent, PICK_IMAGE)
     }
 
-    private fun createImage() {
-
+    private fun createImage(): File {
+        val timestamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.ENGLISH).format(Date())
+        val imageFileName = "JPEG" + "_" + timestamp + "_";
+        val image = File.createTempFile(
+            imageFileName,
+            ".jpg",
+            applicationContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        )
+        currentPhotoFilePath = image.absolutePath
+        return image
     }
 
     private fun loadProductFromServer() {
@@ -245,5 +262,44 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             })
+    }
+
+    companion object {
+        private const val PICK_IMAGE = 3
+
+        private fun writeImage(context: Context, uri: Uri, imageFile: File): Bitmap {
+
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+
+            BitmapFactory.decodeStream(
+                context.contentResolver.openInputStream(uri),
+                null,
+                options
+            )
+
+            val REQUIRED_SIZE = 240
+            var width_tmp = options.outWidth
+            var height_tmp = options.outHeight
+
+            var scale = 1
+            while (width_tmp / 2 >= REQUIRED_SIZE && height_tmp / 2 >= REQUIRED_SIZE) {
+                width_tmp /= 2
+                height_tmp /= 2
+                scale *= 2
+            }
+
+            val scaledOpts = BitmapFactory.Options()
+            scaledOpts.inSampleSize = scale
+
+            val bitmap = BitmapFactory.decodeStream(
+                context.contentResolver.openInputStream(uri),
+                null,
+                scaledOpts
+            )
+            val fos = FileOutputStream(imageFile)
+            bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            return bitmap
+        }
     }
 }
