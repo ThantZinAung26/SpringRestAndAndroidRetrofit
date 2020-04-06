@@ -71,7 +71,7 @@ class ProductAdapter(private val products: ArrayList<Product>) :
                             } else {
                                 Snackbar.make(
                                     itemView,
-                                    
+
                                     "Failed to update item", Snackbar.LENGTH_LONG
                                 ).show()
                                 checkBox.isChecked = !checked
