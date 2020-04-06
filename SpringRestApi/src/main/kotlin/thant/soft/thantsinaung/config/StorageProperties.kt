@@ -4,5 +4,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "folder")
 data class StorageProperties(
-        val location: String
+        var location: String = ""
 )

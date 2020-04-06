@@ -33,36 +33,49 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/desc"
-            app:layout_constraintEnd_toStartOf="@+id/checkBox"
             app:layout_constraintStart_toEndOf="@+id/imageButton"
-            app:layout_constraintTop_toTopOf="@+id/imageButton"
+            app:layout_constraintTop_toBottomOf="@+id/desc"
             tools:text="Redmi Note 3" />
 
         <TextView
             android:id="@+id/desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:linksClickable="true"
             android:text="Description and so on!"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/productTitle"
+            app:layout_constraintStart_toStartOf="@+id/productTitle"
+            app:layout_constraintTop_toTopOf="@+id/imageButton" />
+
+        <TextView
+            android:id="@+id/fileDownloadUrl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:linksClickable="true"
+            android:maxLines="1"
+            android:text="Download"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColorLink="#0B2B87"
+            android:textSize="14sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/imageButton"
             app:layout_constraintEnd_toStartOf="@+id/checkBox"
-            app:layout_constraintStart_toStartOf="@+id/productTitle"
-            app:layout_constraintTop_toBottomOf="@+id/productTitle" />
+            app:layout_constraintStart_toStartOf="@+id/desc"
+            app:layout_constraintTop_toBottomOf="@+id/desc" />
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/desc"
+            app:layout_constraintBottom_toBottomOf="@+id/fileDownloadUrl"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/desc"
             app:layout_constraintTop_toTopOf="@+id/productTitle" />
 
 

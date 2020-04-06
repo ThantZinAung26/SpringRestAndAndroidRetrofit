@@ -11,7 +11,7 @@ interface ProductService {
     @GET("products")
     fun getProductList(): Call<List<Product>>
 
-    @GET
+    @GET("download")
     fun downloadFile(): Call<StatusResponseEntity<Boolean>>
 
     @PUT("add")

@@ -69,7 +69,6 @@ class FileStorageServiceImpl @Autowired constructor(fileProperties: FileProperti
     }
 
     override fun load(filename: String): Path {
-        println(this.rootLocation.resolve(filename))
         return this.rootLocation.resolve(filename)
     }
 

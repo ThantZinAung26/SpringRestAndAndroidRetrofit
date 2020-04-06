@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -33,11 +34,13 @@ class ProductAdapter(private val products: ArrayList<Product>) :
 
         private val tvProductTitle = itemView.findViewById<TextView>(R.id.productTitle)
         private val tvProductDesc = itemView.findViewById<TextView>(R.id.desc)
+        private val tvProductFileDownloadUrl = itemView.findViewById<TextView>(R.id.fileDownloadUrl)
         private val checkBox = itemView.findViewById<CheckBox>(R.id.checkBox)
 
         fun bind(product: Product) {
             tvProductTitle.text = product.name
             tvProductDesc.text = product.description
+            tvProductFileDownloadUrl.text = product.photoPath
             checkBox.isChecked = product.isAvailable
             checkBox.text = if (product.isAvailable) "Sold Out" else "In Stock"
 
@@ -68,6 +71,7 @@ class ProductAdapter(private val products: ArrayList<Product>) :
                             } else {
                                 Snackbar.make(
                                     itemView,
+                                    
                                     "Failed to update item", Snackbar.LENGTH_LONG
                                 ).show()
                                 checkBox.isChecked = !checked
